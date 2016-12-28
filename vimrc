@@ -257,7 +257,7 @@ func SetTitle()
   call append(line(".")+2, '"""')
   call append(line(".")+3, "Author: Rosen")
   call append(line(".")+4, "Mail: rosenluov@gmail.com")
-  call append(line(".")+5, "File: "expand('%:t'))
+  call append(line(".")+5, "File: ".expand("%"))
   call append(line(".")+6, "Created Time: ".strftime("%c"))
   call append(line(".")+7, '"""')
   call append(line(".")+8, "")
@@ -268,8 +268,8 @@ func SetTitle()
  else
   call setline(1, "/*************************************************************************") 
   call append(line("."), " > File Name: ".expand("%"))
-  call append(line(".")+1, " > Author: ")
-  call append(line(".")+2, " > Mail: ")
+  call append(line(".")+1, " > Author: Rosen")
+  call append(line(".")+2, " > Mail: rosenluov@gmail.com")
   call append(line(".")+3, " > Created Time: ".strftime("%c"))
   call append(line(".")+4, " ************************************************************************/") 
   call append(line(".")+5, "")
@@ -333,7 +333,7 @@ let g:ycm_python_binary_path = 'python'
 " 跳转到定义处, 分屏打开
 let g:ycm_goto_buffer_command = 'horizontal-split'
 " nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
-"nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 
 set tabstop=4
 set shiftwidth=4
