@@ -1,12 +1,100 @@
 set nocompatible
 filetype off
 
+" Automatic reloading of .vimrc
+autocmd! bufwritepost .vimrc source %
+
+" Better copy & paste
+" When you want to paste large blocks of code into vim, press F2 before you
+" paste. At the bottom you should see ``-- INSERT (paste) --``.
+set pastetoggle=<F2>
+set clipboard=unnamed
+
+set splitright
+
+" Python folding
+" mkdir -p ~/.vim/ftplugin
+" wget -O ~/.vim/ftplugin/python_editing.vim
+" http://www.vim.org/scripts/download_script.php?src_id=5492
+"set nofoldenable
+
+" Mouse and backspace
+set mouse=a  " on OSX press ALT and click
+set bs=2     " make backspace behave like normal again
+
+" Rebind <Leader> key>
+let mapleader = ','
+
+" Quicksave command
+noremap <C-Z> :update<CR>
+vnoremap <C-Z> <C-C>:update<CR>
+inoremap <C-Z> <C-O>:update<CR>
+
+
+" Quick quit command
+noremap <Leader>e :quit<CR>  " Quit current window
+noremap <Leader>E :qa!<CR>   " Quit all windows
+
+" map sort function to a key
+vnoremap <Leader>s :sort<CR>
+
+" easier moving of code blocks
+" Try to go into visual mode (v), thenselect several lines of code here and
+" then press ``>`` several times.
+vnoremap < <gv  " better indentation
+vnoremap > >gv  " better indentation
+
+" Show whitespace
+" MUST be inserted BEFORE the colorscheme command
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+au InsertLeave * match ExtraWhitespace /\s\+$/
+
+" Color scheme
+" mkdir -p ~/.vim/colors && cd ~/.vim/colors
+" wget -O wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
+set t_Co=256
+color wombat256mod
+
+" Showing line numbers and length
+set number  " show line numbers
+set tw=79   " width of document (used by gd)
+set nowrap  " don't automatically wrap on load
+set fo-=t   " don't automatically wrap text when typing
+set colorcolumn=80
+highlight ColorColumn ctermbg=233
+
+" easier formatting of paragraphs
+vmap Q gq
+nmap Q gqap
+
+
+" Useful settings
+set history=700
+set undolevels=700
+
+" Real programmers don't use TABs but spaces
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set shiftround
+set expandtab
+
+
+" Make search case insensitive
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+
+" Disable stupid backup and swap files - they trigger too many events
+" for file system watchers
+set nobackup
+set nowritebackup
+set noswapfile
 
 "vundle
-set hlsearch 
-
-" 快捷键绑定
-let mapleader = ','
+set hlsearch
+call pathogen#infect()
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -33,7 +121,13 @@ let NERDTreeShowHidden=1
 map <leader>n :NERDTreeToggle<CR>:NERDTreeMirror<CR>
 
 Plugin 'jistr/vim-nerdtree-tabs'
+
+" Settings for ctrlp
 Plugin 'kien/ctrlp.vim' 
+let g:ctrlp_max_height = 30
+set wildignore+=*.pyc
+set wildignore+=*_build/*
+set wildignore+=*/coverage/*
 
 " 缩进指示线
 Bundle 'Yggdroot/indentLine'
@@ -72,8 +166,9 @@ let g:syntastic_check_on_wq = 0
 Bundle 'godlygeek/tabular'
 
 " Powerline状态栏
-Plugin 'Lokaltog/powerline'
-let g:Powerline_symbols = 'fancy'
+Plugin 'Lokaltog/vim-powerline'
+"let g:Powerline_symbols = 'fancy'
+set laststatus=2
 
 " Python代码风格
 Bundle 'hynek/vim-python-pep8-indent'
@@ -127,7 +222,15 @@ Bundle 'cespare/vim-toml'
 "Plugin 'klen/python-mode'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'klen/rope-vim'
+
+" settings for jedi-vim
 Plugin 'davidhalter/jedi-vim'
+let g:jedi#usages_command = "<leader>z"
+let g:jedi#popup_on_dot = 0
+let g:jedi#popup_select_first = 0
+map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
+
+
 Plugin 'ervandew/supertab'
 ""code folding
 Plugin 'tmhedberg/SimpylFold'
@@ -136,23 +239,18 @@ Plugin 'tmhedberg/SimpylFold'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'jnurmine/Zenburn'
 
-call vundle#end()
-filetype plugin indent on
+call vundle#end() " required
+filetype plugin indent on " required
 
-let g:SimpylFold_docstring_preview = 1
+
 
 "autocomplete
 let g:ycm_autoclose_preview_window_after_completion=1
 
-"custom keys
-let mapleader=" "
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-"
 call togglebg#map("<F5>")
 "colorscheme zenburn
 "set guifont=Monaco:h14
 
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 
 "I don't like swap files
 set noswapfile
@@ -182,9 +280,9 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 au BufRead,BufNewFile *py,*pyw,*.c,*.h set tabstop=4
 
 "spaces for indents
-au BufRead,BufNewFile *.py,*pyw set shiftwidth=4
-au BufRead,BufNewFile *.py,*.pyw set expandtab
-au BufRead,BufNewFile *.py set softtabstop=4
+"au BufRead,BufNewFile *.py,*pyw set shiftwidth=4
+"au BufRead,BufNewFile *.py,*.pyw set expandtab
+"au BufRead,BufNewFile *.py set softtabstop=4
 
 " Use the below highlight group when displaying bad whitespace is desired.
 highlight BadWhitespace ctermbg=red guibg=red
@@ -219,10 +317,32 @@ autocmd FileType python set foldmethod=indent
 autocmd FileType python set foldlevel=99
 "use space to open folds
 nnoremap <space> za 
+let g:SimpylFold_docstring_preview = 1
+
 "----------Stop python PEP 8 stuff--------------
 
 "js stuff"
 autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+
+
+" Better navigating through omnicomplete option list
+" See http://stackoverflow.com/questions/2170023/how-to-map-keys-for-popup-menu-in-vim
+set completeopt=longest,menuone
+function! OmniPopup(action)
+    if pumvisible()
+        if a:action == 'j'
+            return "\<C-N>"
+        elseif a:action == 'k'
+            return "\<C-P>"
+        endif
+    endif
+    return a:action
+endfunction
+
+
+inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
+inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
+
 
 
 set relativenumber number
@@ -237,65 +357,62 @@ function! NumberToggle()
   endif
 endfunc
 
-
-
-
 au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn} set filetype=mkd
     let g:vim_markdown_folding_disabled=1
     let g:vim_markdown_no_default_key_mappings=1
 
 
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call SetTitle()"
-func SetTitle()
- if &filetype == 'sh'
-  call setline(1,"\#!/bin/bash")
-  call append(line("."), "")
- elseif &filetype == 'python'
-  call setline(1,"#!/usr/bin/env python")
-  call append(line("."),"# -*- coding=utf-8 -*-")
-  call append(line(".")+1, "")
-  call append(line(".")+2, '"""')
-  call append(line(".")+3, "Author: Rosen")
-  call append(line(".")+4, "Mail: rosenluov@gmail.com")
-  call append(line(".")+5, "File: ".expand("%"))
-  call append(line(".")+6, "Created Time: ".strftime("%c"))
-  call append(line(".")+7, '"""')
-  call append(line(".")+8, "")
- elseif &filetype == 'ruby'
-  call setline(1,"#!/usr/bin/env ruby")
-  call append(line("."),"# encoding: utf-8")
-  call append(line(".")+1, "")
- else
-  call setline(1, "/*************************************************************************") 
-  call append(line("."), " > File Name: ".expand("%"))
-  call append(line(".")+1, " > Author: Rosen")
-  call append(line(".")+2, " > Mail: rosenluov@gmail.com")
-  call append(line(".")+3, " > Created Time: ".strftime("%c"))
-  call append(line(".")+4, " ************************************************************************/") 
-  call append(line(".")+5, "")
- endif
-
- if expand("%:e") == 'cpp'
-  call append(line(".")+6, "#include<iostream>")
-  call append(line(".")+7, "using namespace std;")
-  call append(line(".")+8, "")
- endif
- if &filetype == 'c'
-  call append(line(".")+6, "#include<stdio.h>")
-  call append(line(".")+7, "")
- endif
- if expand("%:e") == 'h'
-  call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
-  call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
-  call append(line(".")+8, "#endif")
- endif
-
- if &filetype == 'java'
-  call append(line(".")+6,"public class ".expand("%:r"))
-  call append(line(".")+7,"")
- endif
-endfunc
+func! SetTitle()
+  if &filetype == 'sh'
+   call setline(1,"\#!/bin/bash")
+   call append(line("."), "")
+  elseif &filetype == 'python'
+   call setline(1,"#!/usr/bin/env python")
+   call append(line("."),"# -*- coding=utf-8 -*-")
+   call append(line(".")+1, "")
+   call append(line(".")+2, '"""')
+   call append(line(".")+3, "Author: Rosen")
+   call append(line(".")+4, "Mail: rosenluov@gmail.com")
+   call append(line(".")+5, "File: ".expand("%"))
+   call append(line(".")+6, "Created Time: ".strftime("%c"))
+   call append(line(".")+7, '"""')
+   call append(line(".")+8, "")
+  elseif &filetype == 'ruby'
+   call setline(1,"#!/usr/bin/env ruby")
+   call append(line("."),"# encoding: utf-8")
+   call append(line(".")+1, "")
+  else
+   call setline(1, "/*************************************************************************") 
+   call append(line("."), " > File Name: ".expand("%"))
+   call append(line(".")+1, " > Author: Rosen")
+   call append(line(".")+2, " > Mail: rosenluov@gmail.com")
+   call append(line(".")+3, " > Created Time: ".strftime("%c"))
+   call append(line(".")+4, " ************************************************************************/") 
+   call append(line(".")+5, "")
+  endif
+ 
+  if expand("%:e") == 'cpp'
+   call append(line(".")+6, "#include<iostream>")
+   call append(line(".")+7, "using namespace std;")
+   call append(line(".")+8, "")
+  endif
+  if &filetype == 'c'
+   call append(line(".")+6, "#include<stdio.h>")
+   call append(line(".")+7, "")
+  endif
+  if expand("%:e") == 'h'
+   call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
+   call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
+   call append(line(".")+8, "#endif")
+  endif
+ 
+  if &filetype == 'java'
+   call append(line(".")+6,"public class ".expand("%:r"))
+   call append(line(".")+7,"")
+  endif
 autocmd BufNewFile * normal G
+endfunc
 
 " python
 au BufNewFile,BufRead *.py
@@ -326,21 +443,19 @@ inoremap ' ''<ESC>i
 set t_ti= t_te=
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe'
-nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let g:ycm_python_binary_path = '/usr/bin/python'
 let g:ycm_python_binary_path = 'python'
 
-" 跳转到定义处, 分屏打开
-let g:ycm_goto_buffer_command = 'horizontal-split'
-" nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+" jump to declaration, vertical split-screen open
+let g:ycm_goto_buffer_command = 'vertical-split'
+nnoremap <leader>jd :YcmCompleter GoTo<CR>
 
-set tabstop=4
-set shiftwidth=4
-set expandtab
+" jump to declaration or definition
+nnoremap <leader>g :YcmCompleter GoToDeclaration<CR>
+
 
 " 高亮所在行
-set cursorcolumn
+"set cursorcolumn
 set cursorline
-highlight CursorLine   cterm=NONE ctermbg=DarkGreen ctermfg=white guibg=NONE guifg=NONE
-highlight CursorColumn cterm=NONE ctermbg=black ctermfg=white guibg=NONE guifg=NONE
+highlight CursorLine   cterm=NONE ctermbg=DarkGreen ctermfg=White guibg=NONE guifg=NONE
+"highlight CursorColumn cterm=NONE ctermbg=black ctermfg=white guibg=NONE guifg=NONE
