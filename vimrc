@@ -457,5 +457,5 @@ nnoremap <leader>g :YcmCompleter GoToDeclaration<CR>
 " 高亮所在行
 "set cursorcolumn
 set cursorline
-highlight CursorLine   cterm=NONE ctermbg=DarkGreen ctermfg=White guibg=NONE guifg=NONE
-"highlight CursorColumn cterm=NONE ctermbg=black ctermfg=white guibg=NONE guifg=NONE
+highlight CursorLine cterm=underline
+highlight underscore ctermbg=red cterm=none ctermfg=yellow

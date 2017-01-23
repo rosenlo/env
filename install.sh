@@ -9,6 +9,7 @@ fi
 if [ ! -e $HOME/.vim/vimrc ]; then
     exit 1
 fi
+mv $HOME/.vimrc $HOME/.vimrc_bak
 ln -s $HOME/.vim/vimrc $HOME/.vimrc
 
 /usr/bin/env git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
