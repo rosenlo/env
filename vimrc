@@ -123,7 +123,7 @@ map <leader>n :NERDTreeToggle<CR>:NERDTreeMirror<CR>
 Plugin 'jistr/vim-nerdtree-tabs'
 
 " Settings for ctrlp
-Plugin 'kien/ctrlp.vim' 
+Plugin 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_max_height = 30
 set wildignore+=*.pyc
 set wildignore+=*_build/*
@@ -239,6 +239,9 @@ Plugin 'tmhedberg/SimpylFold'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'jnurmine/Zenburn'
 
+" multiple selections
+Plugin 'terryma/vim-multiple-cursors'
+
 call vundle#end() " required
 filetype plugin indent on " required
 
@@ -346,7 +349,7 @@ inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
 
 
 set relativenumber number
-noremap <C-n> :call NumberToggle()<cr>
+noremap <C-l> :call NumberToggle()<cr>
 
 " 相对绝对行号转换
 function! NumberToggle()
@@ -443,7 +446,7 @@ inoremap ' ''<ESC>i
 set t_ti= t_te=
 
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe'
-let g:ycm_python_binary_path = '/usr/bin/python'
+let g:ycm_python_binary_path = '/Users/Rosen/env3/bin/python'
 let g:ycm_python_binary_path = 'python'
 
 " jump to declaration, vertical split-screen open
@@ -457,5 +460,7 @@ nnoremap <leader>g :YcmCompleter GoToDeclaration<CR>
 " 高亮所在行
 "set cursorcolumn
 set cursorline
-highlight CursorLine cterm=underline
+"highlight CursorLine   cterm=underline ctermbg=None 
+highlight CursorLine cterm=underline 
 highlight underscore ctermbg=red cterm=none ctermfg=yellow
+"highlight CursorColumn cterm=NONE ctermbg=black ctermfg=white guibg=NONE guifg=NONE
