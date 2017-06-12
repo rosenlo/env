@@ -27,6 +27,7 @@ let mapleader = ','
 
 " Quicksave command
 noremap <C-Z> :update<CR>
+noremap <C-X> :exit<CR>
 vnoremap <C-Z> <C-C>:update<CR>
 inoremap <C-Z> <C-O>:update<CR>
 
@@ -60,7 +61,7 @@ set number  " show line numbers
 set tw=79   " width of document (used by gd)
 set nowrap  " don't automatically wrap on load
 set fo-=t   " don't automatically wrap text when typing
-set colorcolumn=80
+" set colorcolumn=80
 highlight ColorColumn ctermbg=233
 
 " easier formatting of paragraphs
@@ -119,6 +120,8 @@ let NERDTreeChDirMode=2
 let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr', '\.DS_Store']
 let NERDTreeShowHidden=1
 map <leader>n :NERDTreeToggle<CR>:NERDTreeMirror<CR>
+
+au vimenter * NERDTree
 
 Plugin 'jistr/vim-nerdtree-tabs'
 
@@ -242,6 +245,10 @@ Plugin 'jnurmine/Zenburn'
 " multiple selections
 Plugin 'terryma/vim-multiple-cursors'
 
+
+Plugin 'fatih/vim-go'
+
+
 call vundle#end() " required
 filetype plugin indent on " required
 
@@ -258,8 +265,6 @@ call togglebg#map("<F5>")
 "I don't like swap files
 set noswapfile
 
-"turn on numbering
-set nu
 
 "python with virtualenv support
 py << EOF
@@ -423,6 +428,7 @@ au BufNewFile,BufRead *.py
 \ set softtabstop=4|
 \ set shiftwidth=4|
 \ set textwidth=79|
+\ set colorcolumn=79|
 \ set expandtab|
 \ set autoindent|
 \ set fileformat=unix
@@ -439,13 +445,12 @@ au BufNewFile,BufRead *.js,*.html,*.css
 inoremap ( ()<ESC>i
 inoremap [ []<ESC>i
 inoremap { {}<ESC>i
-inoremap < <><ESC>i
 inoremap " ""<ESC>i
 inoremap ' ''<ESC>i
 
 set t_ti= t_te=
 
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe'
+let g:ycm_global_ycm_extra_conf = '/Users/Rosen/.vim/bundle/YouCompleteMe'
 let g:ycm_python_binary_path = '/Users/Rosen/env3/bin/python'
 let g:ycm_python_binary_path = 'python'
 
@@ -454,7 +459,7 @@ let g:ycm_goto_buffer_command = 'vertical-split'
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
 
 " jump to declaration or definition
-nnoremap <leader>g :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>g :YcmCompleter GoToReferences<CR>
 
 
 " 高亮所在行
@@ -464,3 +469,9 @@ set cursorline
 highlight CursorLine cterm=underline 
 highlight underscore ctermbg=red cterm=none ctermfg=yellow
 "highlight CursorColumn cterm=NONE ctermbg=black ctermfg=white guibg=NONE guifg=NONE
+"
+set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
+
+set termencoding=utf-8
+
+set encoding=utf-8
