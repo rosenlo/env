@@ -1,5 +1,11 @@
-set nocompatible
+" pathogen settings.
 filetype off
+call pathogen#infect()
+call pathogen#helptags()
+syntax on
+filetype plugin indent on
+
+set nocompatible
 
 " Automatic reloading of .vimrc
 autocmd! bufwritepost .vimrc source %
@@ -30,7 +36,6 @@ noremap <C-Z> :update<CR>
 noremap <C-X> :exit<CR>
 vnoremap <C-Z> <C-C>:update<CR>
 inoremap <C-Z> <C-O>:update<CR>
-
 
 " Quick quit command
 noremap <Leader>e :quit<CR>  " Quit current window
@@ -68,7 +73,6 @@ highlight ColorColumn ctermbg=233
 vmap Q gq
 nmap Q gqap
 
-
 " Useful settings
 set history=700
 set undolevels=700
@@ -79,7 +83,6 @@ set softtabstop=4
 set shiftwidth=4
 set shiftround
 set expandtab
-
 
 " Make search case insensitive
 set hlsearch
@@ -95,13 +98,12 @@ set noswapfile
 
 "vundle
 set hlsearch
-call pathogen#infect()
+" call pathogen#infect()
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin('~/.vim/bundle')
-
 
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
@@ -109,7 +111,6 @@ Plugin 'gmarik/Vundle.vim'
 " 代码跳转
 set tags+=tags
 set autochdir
-
 
 " Plugin 'VundleVim/Vundle.vim'
 "filesystem
@@ -121,7 +122,10 @@ let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn'
 let NERDTreeShowHidden=1
 map <leader>n :NERDTreeToggle<CR>:NERDTreeMirror<CR>
 
-au vimenter * NERDTree
+"au vimenter * NERDTree
+"
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+
 
 Plugin 'jistr/vim-nerdtree-tabs'
 
@@ -139,20 +143,17 @@ let g:indentLine_char = '┆'
 " 0 is disable
 " let g:indentLine_enabled = 0 
 
-
 "html
-Plugin 'isnowfy/python-vim-instant-markdown'
-Plugin 'jtratner/vim-flavored-markdown'
-Plugin 'suan/vim-instant-markdown'
-Plugin 'nelstrom/vim-markdown-preview'
-"python sytax checker
+" Plugin 'isnowfy/python-vim-instant-markdown'
+" Plugin 'jtratner/vim-flavored-markdown'
+" Plugin 'suan/vim-instant-markdown'
+" Plugin 'nelstrom/vim-markdown-preview'
+" python sytax checker
 Plugin 'nvie/vim-flake8'
 Plugin 'vim-scripts/Pydiction'
 let g:pydiction_location = '~/.vim/bundle/Pydiction'
 Plugin 'vim-scripts/indentpython.vim'
 
-" 代码风格检查
-execute pathogen#infect()
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -162,8 +163,8 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-" Plugin 'scrooloose/syntastic'
-" let g:syntastic_python_checkers=['flake8']
+Plugin 'scrooloose/syntastic'
+let g:syntastic_python_checkers=['flake8']
 
 " 自动对齐
 Bundle 'godlygeek/tabular'
@@ -193,46 +194,56 @@ let g:gitgutter_sign_modified_removed = '~-'
 Bundle 'tpope/vim-fugitive'
 
 " 各种代码高亮/缩进工具
-Bundle 'Glench/Vim-Jinja2-Syntax'
+"Bundle 'Glench/Vim-Jinja2-Syntax'
 
-Bundle 'rodjek/vim-puppet'
+"Bundle 'rodjek/vim-puppet'
 
-Bundle 'tpope/vim-markdown'
+" Bundle 'tpope/vim-markdown'
 
 Bundle 'vim-scripts/nginx.vim'
 
-Bundle 'othree/html5.vim'
+"Bundle 'othree/html5.vim'
 
-Bundle 'solarnz/thrift.vim'
+"Bundle 'solarnz/thrift.vim'
 
-Bundle 'cstrahan/vim-capnp'
+"Bundle 'cstrahan/vim-capnp'
 
-Bundle 'othree/javascript-libraries-syntax.vim'
+"Bundle 'othree/javascript-libraries-syntax.vim'
 
-Bundle 'pangloss/vim-javascript'
+"Bundle 'pangloss/vim-javascript'
 
-Bundle 'saltstack/salt-vim'
+"Bundle 'saltstack/salt-vim'
 
 Bundle 'dag/vim-fish'
 
-Bundle 'chase/vim-ansible-yaml'
+"Bundle 'chase/vim-ansible-yaml'
 
-Bundle 'ryanss/vim-hackernews'
+"Bundle 'ryanss/vim-hackernews'
 
 Bundle 'cespare/vim-toml'
 
 "auto-completion stuff
-"Plugin 'klen/python-mode'
+Plugin 'python-mode/python-mode'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'klen/rope-vim'
+"Plugin 'klen/rope-vim'
 
 " settings for jedi-vim
 Plugin 'davidhalter/jedi-vim'
+let g:jedi#goto_definitions_command = "<leader>d"
 let g:jedi#usages_command = "<leader>z"
+let g:jedi#rename_command = "<leader>_r"
+let g:jedi#documentation_command = "K"
 let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0
 map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
 
+" jump to declaration, vertical split-screen open
+let g:ycm_goto_buffer_command = 'vertical-split'
+nnoremap <leader>jd :YcmCompleter GoTo<CR>
+
+" jump to declaration or definition
+"nnoremap <leader>g :YcmCompleter GoToReferences<CR>
+nnoremap <leader>g :YcmCompleter GoToDefinition<CR>
 
 Plugin 'ervandew/supertab'
 ""code folding
@@ -242,17 +253,30 @@ Plugin 'tmhedberg/SimpylFold'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'jnurmine/Zenburn'
 
+if has('gui_running')
+  set background=dark
+  colorscheme solarized
+else
+  colorscheme zenburn
+endif
+
 " multiple selections
 Plugin 'terryma/vim-multiple-cursors'
 
 
 Plugin 'fatih/vim-go'
 
+Plugin 'rizzatti/dash.vim'
+nmap <silent> <leader>h <Plug>DashSearch
+Plugin 'majutsushi/tagbar'
+
+" targbar
+nmap <leader>t :TagbarToggle<CR>
+let g:tagbar_left = 1
+
 
 call vundle#end() " required
-filetype plugin indent on " required
-
-
+" filetype plugin indent on " required
 
 "autocomplete
 let g:ycm_autoclose_preview_window_after_completion=1
@@ -260,23 +284,22 @@ let g:ycm_autoclose_preview_window_after_completion=1
 call togglebg#map("<F5>")
 "colorscheme zenburn
 "set guifont=Monaco:h14
-
+"
+let g:pymode = 1
+let g:pymode_python = 'python3'
 
 "I don't like swap files
 set noswapfile
 
-
 "python with virtualenv support
-py << EOF
-import os.path
-import sys
-import vim
-if 'VIRTUA_ENV' in os.environ:
-  project_base_dir = os.environ['VIRTUAL_ENV']
-  sys.path.insert(0, project_base_dir)
-  activate_this = os.path.join(project_base_dir,'bin/activate_this.py')
-  execfile(activate_this, dict(__file__=activate_this))
-EOF
+"py << EOF
+"import os
+"import sys
+"if 'VIRTUAL_ENV' in os.environ:
+"  project_base_dir = os.environ['VIRTUAL_ENV']
+"  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+"  execfile(activate_this, dict(__file__=activate_this))
+"EOF
 
 "it would be nice to set tag files by the active virtualenv here
 ":set tags=~/mytags "tags for ctags and taglist
@@ -311,7 +334,6 @@ set encoding=utf-8
 
 " For full syntax highlighting:
 let python_highlight_all=1
-syntax on
 
 " Keep indentation level from previous line:
 autocmd FileType python set autoindent
@@ -324,7 +346,7 @@ set backspace=indent,eol,start
 autocmd FileType python set foldmethod=indent
 autocmd FileType python set foldlevel=99
 "use space to open folds
-nnoremap <space> za 
+nnoremap <space> za
 let g:SimpylFold_docstring_preview = 1
 
 "----------Stop python PEP 8 stuff--------------
@@ -365,9 +387,9 @@ function! NumberToggle()
   endif
 endfunc
 
-au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn} set filetype=mkd
-    let g:vim_markdown_folding_disabled=1
-    let g:vim_markdown_no_default_key_mappings=1
+"au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn} set filetype=mkd
+"    let g:vim_markdown_folding_disabled=1
+"    let g:vim_markdown_no_default_key_mappings=1
 
 
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call SetTitle()"
@@ -453,14 +475,6 @@ set t_ti= t_te=
 let g:ycm_global_ycm_extra_conf = '/Users/Rosen/.vim/bundle/YouCompleteMe'
 let g:ycm_python_binary_path = '/Users/Rosen/env3/bin/python'
 let g:ycm_python_binary_path = 'python'
-
-" jump to declaration, vertical split-screen open
-let g:ycm_goto_buffer_command = 'vertical-split'
-nnoremap <leader>jd :YcmCompleter GoTo<CR>
-
-" jump to declaration or definition
-nnoremap <leader>g :YcmCompleter GoToReferences<CR>
-
 
 " 高亮所在行
 "set cursorcolumn
