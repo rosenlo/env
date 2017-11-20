@@ -9,7 +9,7 @@ fi
 if [ ! -e $HOME/.vim/vimrc ]; then
     exit 1
 fi
-if [ -f $HOME/.vimrc ];then
+if [ -e $HOME/.vimrc ];then
     mv $HOME/.vimrc $HOME/.vimrc_bak
 fi
 ln -s $HOME/.vim/vimrc $HOME/.vimrc
