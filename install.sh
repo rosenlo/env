@@ -2,14 +2,16 @@
 set -o errexit
 
 if [ -d $HOME/.vim ]; then
-    cp $HOME/.vim $HOME/.vim.bak
+    mv $HOME/.vim $HOME/.vim.bak
 fi
 /usr/bin/env git clone https://github.com/RosenLo/vim.git $HOME/.vim
 
 if [ ! -e $HOME/.vim/vimrc ]; then
     exit 1
 fi
-mv $HOME/.vimrc $HOME/.vimrc_bak
+if [ -f $HOME/.vimrc ];then
+    mv $HOME/.vimrc $HOME/.vimrc_bak
+fi
 ln -s $HOME/.vim/vimrc $HOME/.vimrc
 
 mkdir -p ~/.vim/autoload  ~/.vim/bundle && curl -so ~/.vim/autoload/pathogen.vim https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
