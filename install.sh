@@ -2,7 +2,7 @@
 set -o errexit
 
 if [ -d $HOME/.vim ]; then
-    mv $HOME/.vim $HOME/.vim.bak
+    cp $HOME/.vim $HOME/.vim.bak
 fi
 /usr/bin/env git clone https://github.com/RosenLo/vim.git $HOME/.vim
 
