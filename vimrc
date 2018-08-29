@@ -1,147 +1,26 @@
-" pathogen settings.
+set nocompatible              " be iMproved, required
 filetype off
 call pathogen#infect()
 call pathogen#helptags()
 syntax on
-filetype plugin indent on
-
-set nocompatible
-
-" Automatic reloading of .vimrc
-autocmd! bufwritepost .vimrc source %
-
-" Better copy & paste
-" When you want to paste large blocks of code into vim, press F2 before you
-" paste. At the bottom you should see ``-- INSERT (paste) --``.
-set pastetoggle=<F2>
-set clipboard=unnamed
-
-set splitright
-
-" Python folding
-" mkdir -p ~/.vim/ftplugin
-" wget -O ~/.vim/ftplugin/python_editing.vim
-" http://www.vim.org/scripts/download_script.php?src_id=5492
-"set nofoldenable
-
-" Mouse and backspace
-set mouse=a  " on OSX press ALT and click
-set bs=2     " make backspace behave like normal again
-
-" Rebind <Leader> key>
-let mapleader = ','
-
-" Quicksave command
-noremap <C-Z> :update<CR>
-noremap <C-X> :exit<CR>
-vnoremap <C-Z> <C-C>:update<CR>
-inoremap <C-Z> <C-O>:update<CR>
-
-" Quick quit command
-noremap <Leader>e :quit<CR>  " Quit current window
-noremap <Leader>E :qa!<CR>   " Quit all windows
-
-" map sort function to a key
-vnoremap <Leader>s :sort<CR>
-
-" easier moving of code blocks
-" Try to go into visual mode (v), thenselect several lines of code here and
-" then press ``>`` several times.
-vnoremap < <gv  " better indentation
-vnoremap > >gv  " better indentation
-
-" Show whitespace
-" MUST be inserted BEFORE the colorscheme command
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-au InsertLeave * match ExtraWhitespace /\s\+$/
-
-" Color scheme
-" mkdir -p ~/.vim/colors && cd ~/.vim/colors
-" wget -O wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
-set t_Co=256
-color wombat256mod
-
-" Showing line numbers and length
-set number  " show line numbers
-set tw=79   " width of document (used by gd)
-set nowrap  " don't automatically wrap on load
-set fo-=t   " don't automatically wrap text when typing
-" set colorcolumn=80
-highlight ColorColumn ctermbg=233
-
-" easier formatting of paragraphs
-vmap Q gq
-nmap Q gqap
-
-" Useful settings
-set history=700
-set undolevels=700
-
-" Real programmers don't use TABs but spaces
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set shiftround
-set expandtab
-
-" Make search case insensitive
-set hlsearch
-set incsearch
-set ignorecase
-set smartcase
-
-" Disable stupid backup and swap files - they trigger too many events
-" for file system watchers
-set nobackup
-set nowritebackup
-set noswapfile
-
-"vundle
-set hlsearch
-" call pathogen#infect()
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 
-call vundle#begin('~/.vim/bundle')
+" ============================Plugin Begin=====================
+call vundle#begin()
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-
-" 代码跳转
-set tags+=tags
-set autochdir
-
-" Plugin 'VundleVim/Vundle.vim'
-"filesystem
+Plugin 'VundleVim/Vundle.vim'
 
 "Plugin 'scrooloose/nerdtree'
 Bundle 'scrooloose/nerdtree'
-let NERDTreeChDirMode=2
-let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr', '\.DS_Store']
-let NERDTreeShowHidden=1
-map <leader>n :NERDTreeToggle<CR>:NERDTreeMirror<CR>
 
-"au vimenter * NERDTree
-"
 Plugin 'Xuyuanp/nerdtree-git-plugin'
-
 
 Plugin 'jistr/vim-nerdtree-tabs'
 
-" Settings for ctrlp
 Plugin 'ctrlpvim/ctrlp.vim'
-let g:ctrlp_max_height = 30
-set wildignore+=*.pyc
-set wildignore+=*_build/*
-set wildignore+=*/coverage/*
-
-" 缩进指示线
-Bundle 'Yggdroot/indentLine'
-let g:indentLine_color_term = 239
-let g:indentLine_char = '┆'
-" 0 is disable
-" let g:indentLine_enabled = 0 
 
 "html
 " Plugin 'isnowfy/python-vim-instant-markdown'
@@ -151,28 +30,43 @@ let g:indentLine_char = '┆'
 " python sytax checker
 Plugin 'nvie/vim-flake8'
 Plugin 'vim-scripts/Pydiction'
-let g:pydiction_location = '~/.vim/bundle/Pydiction'
+
 Plugin 'vim-scripts/indentpython.vim'
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
 Plugin 'scrooloose/syntastic'
-let g:syntastic_python_checkers=['flake8']
+
+Plugin 'Lokaltog/vim-powerline'
+
+Plugin 'python-mode/python-mode'
+Bundle 'Valloric/YouCompleteMe'
+"Plugin 'klen/rope-vim'
+
+Plugin 'rizzatti/dash.vim'
+
+Plugin 'davidhalter/jedi-vim'
+
+Plugin 'majutsushi/tagbar'
+
+" multiple selections
+Plugin 'terryma/vim-multiple-cursors'
+
+
+Plugin 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+
+
+Plugin 'ervandew/supertab'
+""code folding
+Plugin 'tmhedberg/SimpylFold'
+
+"Colors!!!
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'jnurmine/Zenburn'
 
 " 自动对齐
 Bundle 'godlygeek/tabular'
 
-" Powerline状态栏
-Plugin 'Lokaltog/vim-powerline'
-"let g:Powerline_symbols = 'fancy'
-set laststatus=2
+" 缩进指示线
+Bundle 'Yggdroot/indentLine'
 
 " Python代码风格
 Bundle 'hynek/vim-python-pep8-indent'
@@ -182,13 +76,6 @@ Bundle 'scrooloose/nerdcommenter'
 
 " git状态侧边栏
 Bundle 'airblade/vim-gitgutter'
-let g:gitgutter_highlight_lines = 0
-let g:gitgutter_escape_grep = 1
-let g:gitgutter_eager = 1
-let g:gitgutter_sign_added = '++'
-let g:gitgutter_sign_modified = '~~'
-let g:gitgutter_sign_removed = '--'
-let g:gitgutter_sign_modified_removed = '~-'
 
 " git工具
 Bundle 'tpope/vim-fugitive'
@@ -222,20 +109,78 @@ Bundle 'dag/vim-fish'
 
 Bundle 'cespare/vim-toml'
 
-"auto-completion stuff
-Plugin 'python-mode/python-mode'
-Plugin 'Valloric/YouCompleteMe'
-"Plugin 'klen/rope-vim'
 
-" settings for jedi-vim
-Plugin 'davidhalter/jedi-vim'
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#usages_command = "<leader>z"
-let g:jedi#rename_command = "<leader>_r"
-let g:jedi#documentation_command = "K"
-let g:jedi#popup_on_dot = 0
-let g:jedi#popup_select_first = 0
-map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
+call vundle#end() " required
+filetype plugin indent on
+
+" ============================Plugin End=====================
+
+" Automatic reloading of .vimrc
+autocmd! bufwritepost .vimrc source %
+" autocmd BufWritePost *.go :GoBuild
+autocmd FileType go nmap <leader>b  <Plug>(go-build)
+autocmd FileType go nmap <leader>r  <Plug>(go-run)
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+
+" Keep indentation level from previous line:
+autocmd FileType python set autoindent
+
+" autocmd BufWritePost *.py :PymodeLintAuto
+"
+"Folding based on indentation:
+autocmd FileType python set foldmethod=indent
+autocmd FileType python set foldlevel=99
+
+"js stuff"
+autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+
+" Show whitespace
+" MUST be inserted BEFORE the colorscheme command
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+
+" Better copy & paste
+" When you want to paste large blocks of code into vim, press F2 before you
+" paste. At the bottom you should see ``-- INSERT (paste) --``.
+set pastetoggle=<F2>
+set clipboard=unnamed
+
+set splitright
+
+" Python folding
+" mkdir -p ~/.vim/ftplugin
+" wget -O ~/.vim/ftplugin/python_editing.vim
+" http://www.vim.org/scripts/download_script.php?src_id=5492
+"set nofoldenable
+
+" Mouse and backspace
+set mouse=a  " on OSX press ALT and click
+set bs=2     " make backspace behave like normal again
+
+" Rebind <Leader> key>
+let mapleader = ','
+
+" Quicksave command
+noremap <C-Z> :update<CR>
+noremap <C-X> :exit<CR>
+vnoremap <C-Z> <C-C>:update<CR>
+inoremap <C-Z> <C-O>:update<CR>
+
+" Quick quit command
+noremap <Leader>e :quit<CR>  " Quit current window
+noremap <Leader>E :qa!<CR>   " Quit all windows
+
+
+" map sort function to a key
+vnoremap <Leader>s :sort<CR>
+
+" easier moving of code blocks
+" Try to go into visual mode (v), thenselect several lines of code here and
+" then press ``>`` several times.
+vnoremap < <gv  " better indentation
+vnoremap > >gv  " better indentation
+
 
 " jump to declaration, vertical split-screen open
 let g:ycm_goto_buffer_command = 'vertical-split'
@@ -245,43 +190,169 @@ nnoremap <leader>jd :YcmCompleter GoTo<CR>
 "nnoremap <leader>g :YcmCompleter GoToReferences<CR>
 nnoremap <leader>g :YcmCompleter GoToDefinition<CR>
 
-Plugin 'ervandew/supertab'
-""code folding
-Plugin 'tmhedberg/SimpylFold'
+inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
+inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
 
-"Colors!!!
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'jnurmine/Zenburn'
+set relativenumber number
+noremap <C-l> :call NumberToggle()<cr>
 
-if has('gui_running')
-  set background=dark
-  colorscheme solarized
-else
-  colorscheme zenburn
-endif
+"use space to open folds
+nnoremap <space> za
+let g:SimpylFold_docstring_preview = 1
 
-" multiple selections
-Plugin 'terryma/vim-multiple-cursors'
+" 自动括号、引号
+inoremap ( ()<ESC>i
+inoremap [ []<ESC>i
+inoremap { {}<ESC>i
+inoremap " ""<ESC>i
+inoremap ' ''<ESC>i
 
 
-Plugin 'fatih/vim-go'
+"au vimenter * NERDTree
+map <leader>n :NERDTreeToggle<CR>:NERDTreeMirror<CR>
 
-Plugin 'rizzatti/dash.vim'
+" easier formatting of paragraphs
+vmap Q gq
+nmap Q gqap
+
 nmap <silent> <leader>h <Plug>DashSearch
-Plugin 'majutsushi/tagbar'
 
 " targbar
 nmap <leader>t :TagbarToggle<CR>
 let g:tagbar_left = 1
 
 
-call vundle#end() " required
-" filetype plugin indent on " required
+map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
+
+call togglebg#map("<F5>")
+
+" Color scheme
+" mkdir -p ~/.vim/colors && cd ~/.vim/colors
+" wget -O wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
+set t_Co=256
+color wombat256mod
+
+" Showing line numbers and length
+set number  " show line numbers
+set tw=79   " width of document (used by gd)
+set nowrap  " don't automatically wrap on load
+set fo-=t   " don't automatically wrap text when typing
+" set colorcolumn=80
+highlight ColorColumn ctermbg=233
+
+" Useful settings
+set history=700
+set undolevels=700
+
+" Real programmers don't use TABs but spaces
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set shiftround
+set expandtab
+
+" Make search case insensitive
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+
+" Disable stupid backup and swap files - they trigger too many events
+" for file system watchers
+set nobackup
+set nowritebackup
+set noswapfile
+
+"vundle
+set hlsearch
+
+
+
+" 代码跳转
+set tags+=tags
+set autochdir
+
+
+let NERDTreeChDirMode=2
+let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr', '\.DS_Store']
+let NERDTreeShowHidden=1
+
+" Settings for ctrlp
+let g:ctrlp_max_height = 30
+set wildignore+=*.pyc
+set wildignore+=*_build/*
+set wildignore+=*/coverage/*
+
+" 缩进指示线
+let g:indentLine_color_term = 239
+let g:indentLine_char = '┆'
+" 0 is disable
+" let g:indentLine_enabled = 0 
+
+let g:pydiction_location = '~/.vim/bundle/Pydiction'
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_python_checkers=['flake8']
+
+
+" Powerline状态栏
+"let g:Powerline_symbols = 'fancy'
+set laststatus=2
+
+
+
+" git状态侧边栏
+let g:gitgutter_highlight_lines = 0
+let g:gitgutter_escape_grep = 1
+let g:gitgutter_eager = 1
+let g:gitgutter_sign_added = '++'
+let g:gitgutter_sign_modified = '~~'
+let g:gitgutter_sign_removed = '--'
+let g:gitgutter_sign_modified_removed = '~-'
+
+
+"auto-completion stuff
+
+" settings for jedi-vim
+let g:jedi#goto_definitions_command = "<leader>d"
+let g:jedi#usages_command = "<leader>z"
+let g:jedi#rename_command = "<leader>_r"
+let g:jedi#documentation_command = "K"
+let g:jedi#popup_on_dot = 0
+let g:jedi#popup_select_first = 0
+
+
+
+
+if has('gui_running')
+  set background=dark
+  colorscheme solarized
+else
+  colorscheme Zenburn
+endif
+
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_addtags_transform = "camelcase"
+let g:go_fmt_command = "goimports"
+set autowrite
+
+
+let g:vundle_default_git_proto = 'git'
 
 "autocomplete
 let g:ycm_autoclose_preview_window_after_completion=1
 
-call togglebg#map("<F5>")
 "colorscheme zenburn
 "set guifont=Monaco:h14
 "
@@ -304,7 +375,6 @@ set noswapfile
 "it would be nice to set tag files by the active virtualenv here
 ":set tags=~/mytags "tags for ctags and taglist
 "omnicomplete
-autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "------------Start Python PEP 8 stuff----------------
 " Number of spaces that a pre-existing tab is equal to.
@@ -335,24 +405,14 @@ set encoding=utf-8
 " For full syntax highlighting:
 let python_highlight_all=1
 
-" Keep indentation level from previous line:
-autocmd FileType python set autoindent
 
 " make backspaces more powerfull
 set backspace=indent,eol,start
 
 
-"Folding based on indentation:
-autocmd FileType python set foldmethod=indent
-autocmd FileType python set foldlevel=99
-"use space to open folds
-nnoremap <space> za
-let g:SimpylFold_docstring_preview = 1
 
 "----------Stop python PEP 8 stuff--------------
 
-"js stuff"
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
 
 
 " Better navigating through omnicomplete option list
@@ -370,13 +430,9 @@ function! OmniPopup(action)
 endfunction
 
 
-inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
-inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
 
 
 
-set relativenumber number
-noremap <C-l> :call NumberToggle()<cr>
 
 " 相对绝对行号转换
 function! NumberToggle()
@@ -463,17 +519,11 @@ au BufNewFile,BufRead *.js,*.html,*.css
 \ set fileformat=unix|
 
 
-" 自动括号、引号
-inoremap ( ()<ESC>i
-inoremap [ []<ESC>i
-inoremap { {}<ESC>i
-inoremap " ""<ESC>i
-inoremap ' ''<ESC>i
 
 set t_ti= t_te=
 
 let g:ycm_global_ycm_extra_conf = '/Users/Rosen/.vim/bundle/YouCompleteMe'
-let g:ycm_python_binary_path = '/Users/Rosen/env3/bin/python'
+"let g:ycm_python_binary_path = '/Users/Rosen/.pyenv/versions/3.6.5/bin/python'
 let g:ycm_python_binary_path = 'python'
 
 " 高亮所在行
