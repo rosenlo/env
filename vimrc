@@ -1,7 +1,10 @@
 set nocompatible              " be iMproved, required
 filetype off
+
 call pathogen#infect()
 call pathogen#helptags()
+
+filetype plugin indent on
 syntax on
 
 " set the runtime path to include Vundle and initialize
@@ -14,7 +17,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 "Plugin 'scrooloose/nerdtree'
-Bundle 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdtree'
 
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 
@@ -25,7 +28,6 @@ Plugin 'ctrlpvim/ctrlp.vim'
 "html
 " Plugin 'isnowfy/python-vim-instant-markdown'
 " Plugin 'jtratner/vim-flavored-markdown'
-" Plugin 'suan/vim-instant-markdown'
 " Plugin 'nelstrom/vim-markdown-preview'
 " python sytax checker
 Plugin 'nvie/vim-flake8'
@@ -38,12 +40,12 @@ Plugin 'scrooloose/syntastic'
 Plugin 'Lokaltog/vim-powerline'
 
 Plugin 'python-mode/python-mode'
-Bundle 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
 "Plugin 'klen/rope-vim'
 
 Plugin 'rizzatti/dash.vim'
 
-Plugin 'davidhalter/jedi-vim'
+" Plugin 'davidhalter/jedi-vim'
 
 Plugin 'majutsushi/tagbar'
 
@@ -63,55 +65,62 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'jnurmine/Zenburn'
 
 " 自动对齐
-Bundle 'godlygeek/tabular'
+Plugin 'godlygeek/tabular'
 
 " 缩进指示线
-Bundle 'Yggdroot/indentLine'
+Plugin 'Yggdroot/indentLine'
 
 " Python代码风格
-Bundle 'hynek/vim-python-pep8-indent'
+Plugin 'hynek/vim-python-pep8-indent'
 
 " 注释工具
-Bundle 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdcommenter'
 
 " git状态侧边栏
-Bundle 'airblade/vim-gitgutter'
+Plugin 'airblade/vim-gitgutter'
 
 " git工具
 Bundle 'tpope/vim-fugitive'
 
 " 各种代码高亮/缩进工具
-"Bundle 'Glench/Vim-Jinja2-Syntax'
+"Plugin 'Glench/Vim-Jinja2-Syntax'
 
-"Bundle 'rodjek/vim-puppet'
+"Plugin 'rodjek/vim-puppet'
 
-" Bundle 'tpope/vim-markdown'
+" markdown 语法高亮
+Plugin 'tpope/vim-markdown'
 
-Bundle 'vim-scripts/nginx.vim'
+" markdown 实时预览
+Plugin 'suan/vim-instant-markdown'
 
-"Bundle 'othree/html5.vim'
 
-"Bundle 'solarnz/thrift.vim'
+Plugin 'vim-scripts/nginx.vim'
 
-"Bundle 'cstrahan/vim-capnp'
+"Plugin 'othree/html5.vim'
 
-"Bundle 'othree/javascript-libraries-syntax.vim'
+"Plugin 'solarnz/thrift.vim'
 
-"Bundle 'pangloss/vim-javascript'
+"Plugin 'cstrahan/vim-capnp'
 
-"Bundle 'saltstack/salt-vim'
+"Plugin 'othree/javascript-libraries-syntax.vim'
 
-Bundle 'dag/vim-fish'
+"Plugin 'pangloss/vim-javascript'
 
-"Bundle 'chase/vim-ansible-yaml'
+"Plugin 'saltstack/salt-vim'
 
-"Bundle 'ryanss/vim-hackernews'
+Plugin 'dag/vim-fish'
 
-Bundle 'cespare/vim-toml'
+"Plugin 'chase/vim-ansible-yaml'
+
+"Plugin 'ryanss/vim-hackernews'
+
+Plugin 'cespare/vim-toml'
+
+" Generate table of contents
+Plugin 'mzlogin/vim-markdown-toc'
 
 
 call vundle#end() " required
-filetype plugin indent on
 
 " ============================Plugin End=====================
 
@@ -120,6 +129,8 @@ autocmd! bufwritepost .vimrc source %
 " autocmd BufWritePost *.go :GoBuild
 autocmd FileType go nmap <leader>b  <Plug>(go-build)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
+autocmd FileType go nmap <leader>l  <Plug>(go-lint)
+
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
 autocmd FileType python set omnifunc=pythoncomplete#Complete
@@ -127,8 +138,8 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 " Keep indentation level from previous line:
 autocmd FileType python set autoindent
 
-" autocmd BufWritePost *.py :PymodeLintAuto
-"
+autocmd BufWritePost *.py :PymodeLintAuto
+
 "Folding based on indentation:
 autocmd FileType python set foldmethod=indent
 autocmd FileType python set foldlevel=99
@@ -169,7 +180,7 @@ inoremap <C-Z> <C-O>:update<CR>
 
 " Quick quit command
 noremap <Leader>e :quit<CR>  " Quit current window
-noremap <Leader>E :qa!<CR>   " Quit all windows
+noremap <Leader>E :q!<CR>   " Quit windows without update
 
 
 " map sort function to a key
@@ -184,11 +195,11 @@ vnoremap > >gv  " better indentation
 
 " jump to declaration, vertical split-screen open
 let g:ycm_goto_buffer_command = 'vertical-split'
-nnoremap <leader>jd :YcmCompleter GoTo<CR>
+nnoremap <leader>g :YcmCompleter GoTo<CR>
 
 " jump to declaration or definition
-"nnoremap <leader>g :YcmCompleter GoToReferences<CR>
-nnoremap <leader>g :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>jd :YcmCompleter GoToReferences<CR>
+nnoremap <leader>d :YcmCompleter GoToDefinition<CR>
 
 inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
 inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
@@ -291,9 +302,9 @@ let g:indentLine_char = '┆'
 
 let g:pydiction_location = '~/.vim/bundle/Pydiction'
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -304,7 +315,7 @@ let g:syntastic_python_checkers=['flake8']
 
 
 " Powerline状态栏
-"let g:Powerline_symbols = 'fancy'
+" let g:Powerline_symbols = 'fancy'
 set laststatus=2
 
 
@@ -322,12 +333,12 @@ let g:gitgutter_sign_modified_removed = '~-'
 "auto-completion stuff
 
 " settings for jedi-vim
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#usages_command = "<leader>z"
-let g:jedi#rename_command = "<leader>_r"
-let g:jedi#documentation_command = "K"
-let g:jedi#popup_on_dot = 0
-let g:jedi#popup_select_first = 0
+"let g:jedi#goto_definitions_command = "<leader>d"
+"let g:jedi#usages_command = "<leader>z"
+"let g:jedi#rename_command = "<leader>_r"
+"let g:jedi#documentation_command = "K"
+"let g:jedi#popup_on_dot = 0
+"let g:jedi#popup_select_first = 0
 
 
 
@@ -389,15 +400,15 @@ au BufRead,BufNewFile *py,*pyw,*.c,*.h set tabstop=4
 highlight BadWhitespace ctermbg=red guibg=red
 
 " Display tabs at the beginning of a line in Python mode as bad.
-au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
+autocmd BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
 " Make trailing whitespace be flagged as bad.
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 " Wrap text after a certain number of characters
-au BufRead,BufNewFile *.py,*.pyw, set textwidth=100
+autocmd BufRead,BufNewFile *.py,*.pyw, set textwidth=100
 
 " Use UNIX (\n) line endings.
-au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
+autocmd BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
 
 " Set the default file encoding to UTF-8:
 set encoding=utf-8
@@ -405,10 +416,8 @@ set encoding=utf-8
 " For full syntax highlighting:
 let python_highlight_all=1
 
-
 " make backspaces more powerfull
 set backspace=indent,eol,start
-
 
 
 "----------Stop python PEP 8 stuff--------------
@@ -522,9 +531,10 @@ au BufNewFile,BufRead *.js,*.html,*.css
 
 set t_ti= t_te=
 
-let g:ycm_global_ycm_extra_conf = '/Users/Rosen/.vim/bundle/YouCompleteMe'
+"let g:ycm_global_ycm_extra_conf = '/Users/Rosen/.vim/bundle/YouCompleteMe'
 "let g:ycm_python_binary_path = '/Users/Rosen/.pyenv/versions/3.6.5/bin/python'
-let g:ycm_python_binary_path = 'python'
+"let g:ycm_server_python_interpreter = '/Users/Rosen/.pyenv/shims/python'
+"let g:ycm_python_binary_path = 'python'
 
 " 高亮所在行
 "set cursorcolumn
@@ -539,3 +549,5 @@ set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
 set termencoding=utf-8
 
 set encoding=utf-8
+
+set shell=bash\ -i
