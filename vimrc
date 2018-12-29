@@ -4,8 +4,8 @@ filetype off
 call pathogen#infect()
 call pathogen#helptags()
 
-filetype plugin indent on
 syntax on
+filetype plugin indent on
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -16,7 +16,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-"Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdtree'
 
 Plugin 'Xuyuanp/nerdtree-git-plugin'
@@ -29,9 +28,9 @@ Plugin 'ctrlpvim/ctrlp.vim'
 " Plugin 'isnowfy/python-vim-instant-markdown'
 " Plugin 'jtratner/vim-flavored-markdown'
 " Plugin 'nelstrom/vim-markdown-preview'
+
 " python sytax checker
 Plugin 'nvie/vim-flake8'
-Plugin 'vim-scripts/Pydiction'
 
 Plugin 'vim-scripts/indentpython.vim'
 
@@ -40,6 +39,7 @@ Plugin 'scrooloose/syntastic'
 Plugin 'Lokaltog/vim-powerline'
 
 Plugin 'python-mode/python-mode'
+
 Plugin 'Valloric/YouCompleteMe'
 "Plugin 'klen/rope-vim'
 
@@ -53,7 +53,7 @@ Plugin 'majutsushi/tagbar'
 Plugin 'terryma/vim-multiple-cursors'
 
 
-Plugin 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
+Plugin 'fatih/vim-go'
 
 
 Plugin 'ervandew/supertab'
@@ -124,33 +124,6 @@ call vundle#end() " required
 
 " ============================Plugin End=====================
 
-" Automatic reloading of .vimrc
-autocmd! bufwritepost .vimrc source %
-" autocmd BufWritePost *.go :GoBuild
-autocmd FileType go nmap <leader>b  <Plug>(go-build)
-autocmd FileType go nmap <leader>r  <Plug>(go-run)
-autocmd FileType go nmap <leader>l  <Plug>(go-lint)
-
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
-autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-
-" Keep indentation level from previous line:
-autocmd FileType python set autoindent
-
-autocmd BufWritePost *.py :PymodeLintAuto
-
-"Folding based on indentation:
-autocmd FileType python set foldmethod=indent
-autocmd FileType python set foldlevel=99
-
-"js stuff"
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
-
-" Show whitespace
-" MUST be inserted BEFORE the colorscheme command
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-
 " Better copy & paste
 " When you want to paste large blocks of code into vim, press F2 before you
 " paste. At the bottom you should see ``-- INSERT (paste) --``.
@@ -200,9 +173,6 @@ nnoremap <leader>g :YcmCompleter GoTo<CR>
 " jump to declaration or definition
 nnoremap <leader>jd :YcmCompleter GoToReferences<CR>
 nnoremap <leader>d :YcmCompleter GoToDefinition<CR>
-
-inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
-inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
 
 set relativenumber number
 noremap <C-l> :call NumberToggle()<cr>
@@ -277,8 +247,6 @@ set noswapfile
 "vundle
 set hlsearch
 
-
-
 " 代码跳转
 set tags+=tags
 set autochdir
@@ -300,25 +268,20 @@ let g:indentLine_char = '┆'
 " 0 is disable
 " let g:indentLine_enabled = 0 
 
-let g:pydiction_location = '~/.vim/bundle/Pydiction'
-
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
+" Seetings for syntasitc
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
 let g:syntastic_python_checkers=['flake8']
-
 
 " Powerline状态栏
 " let g:Powerline_symbols = 'fancy'
 set laststatus=2
-
-
 
 " git状态侧边栏
 let g:gitgutter_highlight_lines = 0
@@ -329,9 +292,7 @@ let g:gitgutter_sign_modified = '~~'
 let g:gitgutter_sign_removed = '--'
 let g:gitgutter_sign_modified_removed = '~-'
 
-
 "auto-completion stuff
-
 " settings for jedi-vim
 "let g:jedi#goto_definitions_command = "<leader>d"
 "let g:jedi#usages_command = "<leader>z"
@@ -339,9 +300,6 @@ let g:gitgutter_sign_modified_removed = '~-'
 "let g:jedi#documentation_command = "K"
 "let g:jedi#popup_on_dot = 0
 "let g:jedi#popup_select_first = 0
-
-
-
 
 if has('gui_running')
   set background=dark
@@ -367,8 +325,9 @@ let g:ycm_autoclose_preview_window_after_completion=1
 "colorscheme zenburn
 "set guifont=Monaco:h14
 "
-let g:pymode = 1
-let g:pymode_python = 'python3'
+"let g:pymode = 0
+let g:pymode_lint= 0
+"let g:pymode_python = 'python3'
 
 "I don't like swap files
 set noswapfile
@@ -385,63 +344,6 @@ set noswapfile
 
 "it would be nice to set tag files by the active virtualenv here
 ":set tags=~/mytags "tags for ctags and taglist
-"omnicomplete
-
-"------------Start Python PEP 8 stuff----------------
-" Number of spaces that a pre-existing tab is equal to.
-au BufRead,BufNewFile *py,*pyw,*.c,*.h set tabstop=4
-
-"spaces for indents
-"au BufRead,BufNewFile *.py,*pyw set shiftwidth=4
-"au BufRead,BufNewFile *.py,*.pyw set expandtab
-"au BufRead,BufNewFile *.py set softtabstop=4
-
-" Use the below highlight group when displaying bad whitespace is desired.
-highlight BadWhitespace ctermbg=red guibg=red
-
-" Display tabs at the beginning of a line in Python mode as bad.
-autocmd BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
-" Make trailing whitespace be flagged as bad.
-autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-
-" Wrap text after a certain number of characters
-autocmd BufRead,BufNewFile *.py,*.pyw, set textwidth=100
-
-" Use UNIX (\n) line endings.
-autocmd BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
-
-" Set the default file encoding to UTF-8:
-set encoding=utf-8
-
-" For full syntax highlighting:
-let python_highlight_all=1
-
-" make backspaces more powerfull
-set backspace=indent,eol,start
-
-
-"----------Stop python PEP 8 stuff--------------
-
-
-
-" Better navigating through omnicomplete option list
-" See http://stackoverflow.com/questions/2170023/how-to-map-keys-for-popup-menu-in-vim
-set completeopt=longest,menuone
-function! OmniPopup(action)
-    if pumvisible()
-        if a:action == 'j'
-            return "\<C-N>"
-        elseif a:action == 'k'
-            return "\<C-P>"
-        endif
-    endif
-    return a:action
-endfunction
-
-
-
-
-
 
 " 相对绝对行号转换
 function! NumberToggle()
@@ -456,8 +358,6 @@ endfunc
 "    let g:vim_markdown_folding_disabled=1
 "    let g:vim_markdown_no_default_key_mappings=1
 
-
-autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call SetTitle()"
 func! SetTitle()
   if &filetype == 'sh'
    call setline(1,"\#!/bin/bash")
@@ -509,23 +409,6 @@ func! SetTitle()
 autocmd BufNewFile * normal G
 endfunc
 
-" python
-au BufNewFile,BufRead *.py
-\ set tabstop=4|
-\ set softtabstop=4|
-\ set shiftwidth=4|
-\ set textwidth=79|
-\ set colorcolumn=79|
-\ set expandtab|
-\ set autoindent|
-\ set fileformat=unix
-
-" Front-end
-au BufNewFile,BufRead *.js,*.html,*.css
-\ set tabstop=2|
-\ set softtabstop=2|
-\ set shiftwidth=2|
-\ set fileformat=unix|
 
 
 
@@ -551,3 +434,81 @@ set termencoding=utf-8
 set encoding=utf-8
 
 set shell=bash\ -i
+
+
+" ============================Auto CMD=====================
+" Automatic reloading of .vimrc
+autocmd! bufwritepost .vimrc source %
+" autocmd BufWritePost *.go :GoBuild
+autocmd FileType go nmap <leader>b  <Plug>(go-build)
+autocmd FileType go nmap <leader>r  <Plug>(go-run)
+autocmd FileType go nmap <leader>l  <Plug>(go-lint)
+autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+
+"autocmd BufWritePost *.py :PymodeLintAuto
+"autocmd FileType python nmap <leader>l :PymodeLintAuto<CR>
+autocmd FileType python nmap <leader>l :0,$!yapf<CR>
+
+autocmd FileType python nnoremap <leader>i :!isort %<CR>
+
+"
+autocmd BufWritePost *.py call Flake8()
+
+" Front-end
+autocmd BufNewFile,BufRead *.js,*.html,*.css
+\ set tabstop=2|
+\ set softtabstop=2|
+\ set shiftwidth=2|
+\ set fileformat=unix|
+
+" Show whitespace
+" MUST be inserted BEFORE the colorscheme command
+
+highlight ExtraWhitespace ctermbg=red guibg=red
+
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+
+autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call SetTitle()"
+
+"------------Start Python PEP 8 stuff----------------
+autocmd BufNewFile,BufRead *.py
+\ set tabstop=4|
+\ set softtabstop=4|
+\ set shiftwidth=4|
+\ set textwidth=79|
+\ set colorcolumn=79|
+\ set foldmethod=indent|
+\ set foldlevel=99|
+\ set expandtab|
+\ set autoindent|
+\ set fileformat=unix
+
+" Number of spaces that a pre-existing tab is equal to.
+autocmd BufRead,BufNewFile *py,*pyw,*.c,*.h set tabstop=4
+
+" Use the below highlight group when displaying bad whitespace is desired.
+highlight BadWhitespace ctermbg=red guibg=red
+
+" Display tabs at the beginning of a line in Python mode as bad.
+autocmd BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
+" Make trailing whitespace be flagged as bad.
+autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+
+" Wrap text after a certain number of characters
+autocmd BufRead,BufNewFile *.py,*.pyw, set textwidth=79
+
+" Use UNIX (\n) line endings.
+autocmd BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
+
+" Set the default file encoding to UTF-8:
+set encoding=utf-8
+
+" For full syntax highlighting:
+let python_highlight_all=1
+
+" make backspaces more powerfull
+set backspace=indent,eol,start
+
+"----------Stop python PEP 8 stuff--------------
+
+" ============================Auto CMD End=====================
