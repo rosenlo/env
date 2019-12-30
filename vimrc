@@ -63,6 +63,7 @@ Plugin 'tmhedberg/SimpylFold'
 "Colors!!!
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'jnurmine/Zenburn'
+Plugin 'flazz/vim-colorschemes'
 
 " 自动对齐
 Plugin 'godlygeek/tabular'
@@ -111,6 +112,7 @@ Plugin 'vim-scripts/nginx.vim'
 Plugin 'dag/vim-fish'
 
 "Plugin 'chase/vim-ansible-yaml'
+Plugin 'stephpy/vim-yaml'
 
 "Plugin 'ryanss/vim-hackernews'
 
@@ -207,19 +209,12 @@ map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
 
 call togglebg#map("<F5>")
 
-" Color scheme
-" mkdir -p ~/.vim/colors && cd ~/.vim/colors
-" wget -O wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
-set t_Co=256
-color wombat256mod
-
 " Showing line numbers and length
 set number  " show line numbers
 set tw=79   " width of document (used by gd)
 set nowrap  " don't automatically wrap on load
 set fo-=t   " don't automatically wrap text when typing
-" set colorcolumn=80
-highlight ColorColumn ctermbg=233
+"set colorcolumn=80
 
 " Useful settings
 set history=700
@@ -305,13 +300,20 @@ if has('gui_running')
   set background=dark
   colorscheme solarized
 else
-  colorscheme Zenburn
+ "colorscheme Zenburn
+  colorscheme molokai
 endif
 
+
+
+" go highligh
+let g:go_highlight_function_calls = 1
+let g:go_highlight_structs = 1
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
 let g:go_addtags_transform = "camelcase"
 let g:go_fmt_command = "goimports"
 set autowrite
@@ -326,8 +328,25 @@ let g:ycm_autoclose_preview_window_after_completion=1
 "set guifont=Monaco:h14
 "
 "let g:pymode = 0
-let g:pymode_lint= 0
 "let g:pymode_python = 'python3'
+let g:pymode_virtualenv = 1
+let g:pymode_motion = 0
+let g:pymode_lint_unmodified = 0
+let g:pymode_lint_on_write = 0
+let g:pymode_lint_checkers = ['pylint', 'pyflakes', 'pep8', 'mccabe']
+let g:pymode_lint_ignore = ["C0111",]
+let g:pymode_lint_sort = ['E', 'C', 'I']
+
+
+function! PythonMode()
+    if has('python3')
+        let g:pymode_python = 'python3'
+    else
+        let g:pymode_python = 'python'
+    endif
+endfunc
+
+autocmd FileType python exec ":call PythonMode()"
 
 "I don't like swap files
 set noswapfile
@@ -378,12 +397,12 @@ func! SetTitle()
    call append(line("."),"# encoding: utf-8")
    call append(line(".")+1, "")
   else
-   call setline(1, "/*************************************************************************") 
-   call append(line("."), " > File Name: ".expand("%"))
-   call append(line(".")+1, " > Author: Rosen")
-   call append(line(".")+2, " > Mail: rosenluov@gmail.com")
-   call append(line(".")+3, " > Created Time: ".strftime("%c"))
-   call append(line(".")+4, " ************************************************************************/") 
+   call setline(1, "/**") 
+   call append(line("."), " * File Name: ".expand("%"))
+   call append(line(".")+1, " * Author: Rosen")
+   call append(line(".")+2, " * Mail: rosenluov@gmail.com")
+   call append(line(".")+3, " * Created Time: ".strftime("%c"))
+   call append(line(".")+4, " */") 
    call append(line(".")+5, "")
   endif
  
@@ -415,17 +434,22 @@ endfunc
 set t_ti= t_te=
 
 "let g:ycm_global_ycm_extra_conf = '/Users/Rosen/.vim/bundle/YouCompleteMe'
-"let g:ycm_python_binary_path = '/Users/Rosen/.pyenv/versions/3.6.5/bin/python'
+"let g:ycm_python_binary_path = '/Users/Rosen/.pyenv/versions/k8s-management/bin/python'
 "let g:ycm_server_python_interpreter = '/Users/Rosen/.pyenv/shims/python'
+"let g:ycm_paht_to_python_interpreter = '/Users/Rosen/.pyenv/shims/python'
+let g:ycm_python_binary_path= '/Users/Rosen/.pyenv/shims/python'
 "let g:ycm_python_binary_path = 'python'
 
 " 高亮所在行
 "set cursorcolumn
+set t_Co=256
 set cursorline
-"highlight CursorLine   cterm=underline ctermbg=None 
-highlight CursorLine cterm=underline 
-highlight underscore ctermbg=red cterm=none ctermfg=yellow
+highlight CursorLine cterm=underline
+"highlight CursorLine   cterm=underline ctermbg=None
+highlight ColorColumn ctermbg=red
 "highlight CursorColumn cterm=NONE ctermbg=black ctermfg=white guibg=NONE guifg=NONE
+highlight underscore ctermbg=red cterm=none ctermfg=yellow
+highlight ExtraWhitespace ctermbg=red guibg=red
 "
 set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
 
@@ -443,16 +467,17 @@ autocmd! bufwritepost .vimrc source %
 autocmd FileType go nmap <leader>b  <Plug>(go-build)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
 autocmd FileType go nmap <leader>l  <Plug>(go-lint)
-autocmd BufNewFile,BufRead *.go setlocal noexpandtab tabstop=4 shiftwidth=4
+autocmd FileType go nmap <leader>jd  <Plug>(go-implements)
+autocmd BufNewFile,BufRead *.go setlocal filetype=go noexpandtab tabstop=4 shiftwidth=4
 
-"autocmd BufWritePost *.py :PymodeLintAuto
-"autocmd FileType python nmap <leader>l :PymodeLintAuto<CR>
-autocmd FileType python nmap <leader>l :0,$!yapf<CR>
+"autocmd BufWritePost *.py :PymodeLint
+autocmd FileType python nmap <leader>l :PymodeLint<CR>
+autocmd FileType python nmap <leader>y :0,$!yapf<CR>
 
 autocmd FileType python nnoremap <leader>i :!isort %<CR>
 
-"
-autocmd BufWritePost *.py call Flake8()
+
+"autocmd BufWritePost *.py call Flake8()
 
 " Front-end
 autocmd BufNewFile,BufRead *.js,*.html,*.css
@@ -464,14 +489,13 @@ autocmd BufNewFile,BufRead *.js,*.html,*.css
 " Show whitespace
 " MUST be inserted BEFORE the colorscheme command
 
-highlight ExtraWhitespace ctermbg=red guibg=red
 
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call SetTitle()"
 
 "------------Start Python PEP 8 stuff----------------
-autocmd BufNewFile,BufRead *.py
+autocmd FileType python
 \ set tabstop=4|
 \ set softtabstop=4|
 \ set shiftwidth=4|
@@ -484,7 +508,7 @@ autocmd BufNewFile,BufRead *.py
 \ set fileformat=unix
 
 " Number of spaces that a pre-existing tab is equal to.
-autocmd BufRead,BufNewFile *py,*pyw,*.c,*.h set tabstop=4
+autocmd BufRead,BufNewFile *.c,*.h set tabstop=4
 
 " Use the below highlight group when displaying bad whitespace is desired.
 highlight BadWhitespace ctermbg=red guibg=red
@@ -493,9 +517,6 @@ highlight BadWhitespace ctermbg=red guibg=red
 autocmd BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
 " Make trailing whitespace be flagged as bad.
 autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-
-" Wrap text after a certain number of characters
-autocmd BufRead,BufNewFile *.py,*.pyw, set textwidth=79
 
 " Use UNIX (\n) line endings.
 autocmd BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
@@ -510,5 +531,15 @@ let python_highlight_all=1
 set backspace=indent,eol,start
 
 "----------Stop python PEP 8 stuff--------------
+
+" yaml syntax
+"autocmd BufNewFile,BufRead *.yaml,*.yml so ~/.vim/yaml.vim
+
+autocmd BufNewFile,BufRead *.yaml,*.yml
+\ set tabstop=2|
+\ set softtabstop=2|
+\ set shiftwidth=2|
+\ set expandtab|
+\ so ~/.vim/yaml.vim
 
 " ============================Auto CMD End=====================
