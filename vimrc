@@ -200,7 +200,7 @@ nmap Q gqap
 
 nmap <silent> <leader>h <Plug>DashSearch
 
-" targbar
+" tagbar
 nmap <leader>t :TagbarToggle<CR>
 let g:tagbar_left = 1
 
@@ -465,9 +465,11 @@ set shell=bash\ -i
 autocmd! bufwritepost .vimrc source %
 " autocmd BufWritePost *.go :GoBuild
 autocmd FileType go nmap <leader>b  <Plug>(go-build)
+" autocmd FileType go nmap <leader>t  <Plug>(go-test)
 autocmd FileType go nmap <leader>r  <Plug>(go-run)
 autocmd FileType go nmap <leader>l  <Plug>(go-lint)
 autocmd FileType go nmap <leader>jd  <Plug>(go-implements)
+autocmd FileType go nmap <leader>c :GoCallers<CR>
 autocmd BufNewFile,BufRead *.go setlocal filetype=go noexpandtab tabstop=4 shiftwidth=4
 
 "autocmd BufWritePost *.py :PymodeLint
@@ -488,6 +490,10 @@ autocmd BufNewFile,BufRead *.js,*.html,*.css
 
 " Show whitespace
 " MUST be inserted BEFORE the colorscheme command
+
+" quickfix
+"set switchbuf+=usetab,newtab
+autocmd FileType qf nnoremap <buffer> <Enter> <C-W><Enter><C-W>L
 
 
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
