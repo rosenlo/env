@@ -24,13 +24,15 @@ Plugin 'jistr/vim-nerdtree-tabs'
 
 Plugin 'ctrlpvim/ctrlp.vim'
 
+Plugin 'rust-lang/rust.vim'
+
 "html
 " Plugin 'isnowfy/python-vim-instant-markdown'
 " Plugin 'jtratner/vim-flavored-markdown'
 " Plugin 'nelstrom/vim-markdown-preview'
 
 " python sytax checker
-Plugin 'nvie/vim-flake8'
+" Plugin 'nvie/vim-flake8'
 
 Plugin 'vim-scripts/indentpython.vim'
 
@@ -121,6 +123,9 @@ Plugin 'cespare/vim-toml'
 " Generate table of contents
 Plugin 'mzlogin/vim-markdown-toc'
 
+Plugin 'hashivim/vim-terraform'
+
+Plugin 'wakatime/vim-wakatime'
 
 call vundle#end() " required
 
@@ -211,7 +216,7 @@ call togglebg#map("<F5>")
 
 " Showing line numbers and length
 set number  " show line numbers
-set tw=79   " width of document (used by gd)
+"set tw=79   " width of document (used by gd)
 set nowrap  " don't automatically wrap on load
 set fo-=t   " don't automatically wrap text when typing
 "set colorcolumn=80
@@ -272,7 +277,7 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers=['flake8']
+"let g:syntastic_python_checkers=['flake8']
 
 " Powerline状态栏
 " let g:Powerline_symbols = 'fancy'
@@ -330,11 +335,10 @@ let g:ycm_autoclose_preview_window_after_completion=1
 "let g:pymode = 0
 "let g:pymode_python = 'python3'
 let g:pymode_virtualenv = 1
+let g:pymode_lint_on_write = 1
 let g:pymode_motion = 0
-let g:pymode_lint_unmodified = 0
-let g:pymode_lint_on_write = 0
 let g:pymode_lint_checkers = ['pylint', 'pyflakes', 'pep8', 'mccabe']
-let g:pymode_lint_ignore = ["C0111",]
+let g:pymode_lint_ignore = ["C0111", "E501",]
 let g:pymode_lint_sort = ['E', 'C', 'I']
 
 
@@ -387,7 +391,7 @@ func! SetTitle()
    call append(line(".")+1, "")
    call append(line(".")+2, '"""')
    call append(line(".")+3, "Author: Rosen")
-   call append(line(".")+4, "Mail: rosenluov@gmail.com")
+   call append(line(".")+4, "Mail: rosenpy@gmail.com")
    call append(line(".")+5, "File: ".expand("%"))
    call append(line(".")+6, "Created Time: ".strftime("%c"))
    call append(line(".")+7, '"""')
@@ -400,7 +404,7 @@ func! SetTitle()
    call setline(1, "/**") 
    call append(line("."), " * File Name: ".expand("%"))
    call append(line(".")+1, " * Author: Rosen")
-   call append(line(".")+2, " * Mail: rosenluov@gmail.com")
+   call append(line(".")+2, " * Mail: rosenpy@gmail.com")
    call append(line(".")+3, " * Created Time: ".strftime("%c"))
    call append(line(".")+4, " */") 
    call append(line(".")+5, "")
@@ -437,7 +441,8 @@ set t_ti= t_te=
 "let g:ycm_python_binary_path = '/Users/Rosen/.pyenv/versions/k8s-management/bin/python'
 "let g:ycm_server_python_interpreter = '/Users/Rosen/.pyenv/shims/python'
 "let g:ycm_paht_to_python_interpreter = '/Users/Rosen/.pyenv/shims/python'
-let g:ycm_python_binary_path= '/Users/Rosen/.pyenv/shims/python'
+let g:ycm_python_binary_path= '/Users/user/.pyenv/shims/python'
+"let g:ycm_python_binary_path= '/usr/bin/python3'
 "let g:ycm_python_binary_path = 'python'
 
 " 高亮所在行
@@ -446,7 +451,7 @@ set t_Co=256
 set cursorline
 highlight CursorLine cterm=underline
 "highlight CursorLine   cterm=underline ctermbg=None
-highlight ColorColumn ctermbg=red
+"highlight ColorColumn ctermbg=red
 "highlight CursorColumn cterm=NONE ctermbg=black ctermfg=white guibg=NONE guifg=NONE
 highlight underscore ctermbg=red cterm=none ctermfg=yellow
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -458,6 +463,8 @@ set termencoding=utf-8
 set encoding=utf-8
 
 set shell=bash\ -i
+
+let g:terraform_align=1
 
 
 " ============================Auto CMD=====================
