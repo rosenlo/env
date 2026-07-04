@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -o errexit
+set -o nounset
 
 REPO_URL="https://github.com/rosenlo/env.git"
 REPO_DIR="$HOME/github/rosenlo/env"
@@ -38,6 +39,13 @@ if [ -d "$AUTOSUGGEST_DIR" ]; then
   git -C "$AUTOSUGGEST_DIR" pull
 else
   git clone https://github.com/zsh-users/zsh-autosuggestions "$AUTOSUGGEST_DIR"
+fi
+
+echo "==> Installing starship..."
+if command -v starship &>/dev/null; then
+  echo "    already installed, skipping"
+else
+  curl -sS https://starship.rs/install.sh | sh -s -- -y
 fi
 
 echo "==> Installing vim-plug..."

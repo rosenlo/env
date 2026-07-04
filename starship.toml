@@ -1,0 +1,21 @@
+format = """
+[$directory]($style)\
+$git_branch\
+$git_status\
+$time\
+➜ """
+
+[directory]
+style = "bold green"
+truncation_length = 0
+
+[git_branch]
+style = "bold blue"
+
+[git_status]
+style = "bold blue"
+
+[time]
+disabled = false
+format = " [%T]"
+style = "dim white"

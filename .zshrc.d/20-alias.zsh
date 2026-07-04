@@ -1,0 +1,7 @@
+alias l='ls -la'
+alias ll='ls -l'
+alias cdg='cd $HOME/go/src'
+alias cdw='cd $HOME/work'
+alias ct='cat $HOME/work/git-commit.txt'
+alias k='kubectl'
+alias git='hub'
