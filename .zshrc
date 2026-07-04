@@ -7,7 +7,7 @@ plugins=(git zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
 
 # Show full path instead of basename
-PROMPT='%{$fg_bold[green]%}%~ %{$fg_bold[blue]%}$(git_prompt_info)%{$reset_color%}➜ '
+PROMPT='%{$fg_bold[green]%}%~ %{$fg_bold[blue]%}$(git_prompt_info)%{$reset_color%}%* ➜ '
 
 alias l='ls -la'
 alias ll='ls -l'
