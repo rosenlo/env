@@ -2,8 +2,7 @@ format = """
 [$directory]($style)\
 $git_branch\
 $git_status\
-$time\
-➜ """
+$time ➜ """
 
 [directory]
 style = "bold green"
@@ -19,6 +18,6 @@ style = "bold blue"
 
 [time]
 disabled = false
-time_format = "%T"
+time_format = "%H:%M"
 format = " [$time]($style)"
 style = "dim white"
