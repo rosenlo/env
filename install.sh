@@ -45,7 +45,8 @@ echo "==> Installing starship..."
 if command -v starship &>/dev/null; then
   echo "    already installed, skipping"
 else
-  curl -sS https://starship.rs/install.sh | sh -s -- -y
+  mkdir -p "$HOME/.local/bin"
+  curl -sS https://starship.rs/install.sh | sh -s -- -y -b "$HOME/.local/bin"
 fi
 
 echo "==> Installing vim-plug..."
