@@ -17,5 +17,6 @@ style = "bold blue"
 
 [time]
 disabled = false
-format = " [%T]"
+time_format = "%T"
+format = " [$time]($style)"
 style = "dim white"
