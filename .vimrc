@@ -1,37 +1,28 @@
 set nocompatible
-filetype off
-
-call pathogen#infect()
-call pathogen#helptags()
-
 syntax on
 filetype plugin indent on
 
-set rtp+=~/.vim/bundle/Vundle.vim
+call plug#begin()
 
-call vundle#begin()
+Plug 'scrooloose/nerdtree'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'rust-lang/rust.vim'
+Plug 'majutsushi/tagbar'
+Plug 'scrooloose/nerdcommenter'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-markdown'
+Plug 'vim-scripts/nginx.vim'
+Plug 'stephpy/vim-yaml'
+Plug 'cespare/vim-toml'
+Plug 'hashivim/vim-terraform'
+Plug 'hynek/vim-python-pep8-indent'
+Plug 'godlygeek/tabular'
+Plug 'Yggdroot/indentLine'
+Plug 'fatih/vim-go'
+Plug 'flazz/vim-colorschemes'
 
-Plugin 'VundleVim/Vundle.vim'
-
-Plugin 'scrooloose/nerdtree'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'rust-lang/rust.vim'
-Plugin 'majutsushi/tagbar'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-markdown'
-Plugin 'vim-scripts/nginx.vim'
-Plugin 'stephpy/vim-yaml'
-Plugin 'cespare/vim-toml'
-Plugin 'hashivim/vim-terraform'
-Plugin 'hynek/vim-python-pep8-indent'
-Plugin 'godlygeek/tabular'
-Plugin 'Yggdroot/indentLine'
-Plugin 'fatih/vim-go'
-Plugin 'flazz/vim-colorschemes'
-
-call vundle#end()
+call plug#end()
 
 let mapleader = ','
 
@@ -80,7 +71,11 @@ set encoding=utf-8
 
 " Colors
 set background=dark
-colorscheme molokai
+try
+  colorscheme molokai
+catch
+  colorscheme default
+endtry
 
 " Tags
 set tags+=tags
