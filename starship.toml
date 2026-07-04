@@ -8,6 +8,7 @@ $time\
 [directory]
 style = "bold green"
 truncation_length = 0
+home_symbol = "~"
 
 [git_branch]
 style = "bold blue"
