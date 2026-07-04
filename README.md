@@ -1,15 +1,29 @@
+# env
+
+Personal environment config — vim, zsh, and dotfiles.
+
 ## Install
-```
-wget https://raw.githubusercontent.com/RosenLo/vim/master/install.sh -O - | sh
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/rosenlo/env/master/install.sh | bash
 ```
 
-## Shortcut key
-key | mode | description
---- | --- | ---
-`,e` | normal | quit current window
-`,E` | normal | quit all windows
-`,n` | normal | tree current directory
-`,z` | normal | find the used
-`,b` | noraml | set trace for python 
-`,g` | noraml | find the declaration
-`,s` | visual | select the blocks to sort alphabetic
+## Structure
+
+| File | Symlinked to |
+|------|-------------|
+| `.vimrc` | `~/.vimrc` |
+| `.zshrc` | `~/.zshrc` |
+
+## Vim Shortcuts
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `,e` | normal | quit current window |
+| `,E` | normal | quit all windows |
+| `,n` | normal | toggle NERDTree |
+| `,z` | normal | find usages |
+| `,b` | normal | insert ipdb breakpoint |
+| `,g` | normal | go to declaration |
+| `,s` | visual | sort selection |
+| `,t` | normal | toggle Tagbar |
