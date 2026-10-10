@@ -14,6 +14,7 @@ curl -fsSL https://raw.githubusercontent.com/rosenlo/env/master/install.sh | bas
 |------|-------------|
 | `.vimrc` | `~/.vimrc` |
 | `.zshrc` | `~/.zshrc` |
+| `claude/statusline.sh` | `~/.claude/statusline.sh` |
 
 ## Vim Shortcuts
 
@@ -27,3 +28,15 @@ curl -fsSL https://raw.githubusercontent.com/rosenlo/env/master/install.sh | bas
 | `,g` | normal | go to declaration |
 | `,s` | visual | sort selection |
 | `,t` | normal | toggle Tagbar |
+
+## Claude Code status line
+
+`claude/statusline.sh` renders model, tok/s, cost, duration, cache hit rate and context % below the prompt
+(modelled on [opencode-status-bar](https://github.com/rosenlo/opencode-status-bar)). Needs `jq`. Enable it in `~/.claude/settings.json`:
+
+```json
+{ "statusLine": { "type": "command", "command": "~/.claude/statusline.sh" } }
+```
+
+Edit `SHOW` at the top of the script to pick and order segments. tok/s is the end-to-end rate of the last
+step (includes time to first token), derived from the transcript.

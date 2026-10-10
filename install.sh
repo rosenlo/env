@@ -25,6 +25,11 @@ for file in .vimrc .zshrc; do
   echo "    linked $file"
 done
 
+echo "==> Linking Claude Code status line..."
+mkdir -p "$HOME/.claude"
+ln -sf "$REPO_DIR/claude/statusline.sh" "$HOME/.claude/statusline.sh"
+echo "    linked ~/.claude/statusline.sh (register it under statusLine in ~/.claude/settings.json)"
+
 echo "==> Installing oh-my-zsh..."
 if [ -d "$HOME/.oh-my-zsh" ]; then
   echo "    already installed, skipping"
