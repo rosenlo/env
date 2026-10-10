@@ -1,8 +1,9 @@
 #!/bin/bash
 # Claude Code status line, modelled on rosenlo/opencode-status-bar.
-# Segments (edit SHOW to reorder/remove): model tps cost dur total cache ctx
+# Segments (edit SHOW to reorder/remove): model tps cost dur total cache ctx 5h 7d
+# 5h / 7d = subscription rate-limit usage and time until reset.
 # dur = current/last turn time, total = whole session wall time.
-SHOW="model tps cost dur total cache ctx"
+SHOW="model tps cost dur total cache ctx 5h 7d"
 
 input=$(cat)
 j() { printf '%s' "$input" | jq -r "$1 // empty" 2>/dev/null; }
@@ -71,6 +72,24 @@ fmt_dur() {
   else printf '%ds' "$s"; fi
 }
 
+# Subscription rate limits: "<used>% (<time until reset>)"; absent for non-subscription auth.
+fmt_left() {
+  local s=$(($1 - $(date +%s)))
+  [ "$s" -le 0 ] && { printf 'now'; return; }
+  if [ "$s" -ge 86400 ]; then printf '%dd%dh' $((s / 86400)) $((s % 86400 / 3600))
+  elif [ "$s" -ge 3600 ]; then printf '%dh%02dm' $((s / 3600)) $((s % 3600 / 60))
+  else printf '%dm' $((s / 60)); fi
+}
+rate_seg() { # $1=label $2=jq key
+  local pct reset
+  pct=$(j ".rate_limits.$2.used_percentage"); reset=$(j ".rate_limits.$2.resets_at")
+  [ -z "$pct" ] && return
+  printf '%s %.0f%%' "$1" "$pct"
+  [ -n "$reset" ] && printf ' (%s)' "$(fmt_left "${reset%.*}")"
+}
+rl5=$(rate_seg 5h five_hour)
+rl7=$(rate_seg 7d seven_day)
+
 dim=$'\033[2m'; rst=$'\033[0m'; cyan=$'\033[36m'
 parts=()
 for seg in $SHOW; do
@@ -82,6 +101,8 @@ for seg in $SHOW; do
     total) [ -n "$dur_ms" ] && parts+=("Σ $(fmt_dur "${dur_ms%.*}")") ;;
     cache) [ -n "$cache" ] && parts+=("cache ${cache}") ;;
     ctx)   [ -n "$ctx" ] && parts+=("ctx ${ctx}") ;;
+    5h)    [ -n "$rl5" ] && parts+=("$rl5") ;;
+    7d)    [ -n "$rl7" ] && parts+=("$rl7") ;;
   esac
 done
 
