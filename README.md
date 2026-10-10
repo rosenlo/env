@@ -31,7 +31,7 @@ curl -fsSL https://raw.githubusercontent.com/rosenlo/env/master/install.sh | bas
 
 ## Claude Code status line
 
-`claude/statusline.sh` renders model, tok/s, cost, duration, cache hit rate and context % below the prompt
+`claude/statusline.sh` renders model, tok/s, cost, turn time (`dur`), session time (`total`), cache hit rate and context % below the prompt
 (modelled on [opencode-status-bar](https://github.com/rosenlo/opencode-status-bar)). Needs `jq`. Enable it in `~/.claude/settings.json`:
 
 ```json

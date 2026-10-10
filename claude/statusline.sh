@@ -1,7 +1,8 @@
 #!/bin/bash
 # Claude Code status line, modelled on rosenlo/opencode-status-bar.
-# Segments (edit SHOW to reorder/remove): model tps cost dur cache ctx
-SHOW="model tps cost dur cache ctx"
+# Segments (edit SHOW to reorder/remove): model tps cost dur total cache ctx
+# dur = current/last turn time, total = whole session wall time.
+SHOW="model tps cost dur total cache ctx"
 
 input=$(cat)
 j() { printf '%s' "$input" | jq -r "$1 // empty" 2>/dev/null; }
@@ -50,6 +51,19 @@ elif [ -n "$ctx_used" ]; then
   ctx=$(awk -v u="$ctx_used" -v w="$win" 'BEGIN{printf "%.0f%%", u*100/w}')
 fi
 
+# Turn time: frozen turn_duration once the turn is done, otherwise live since the last user prompt.
+turn_ms=""
+if [ -n "$transcript" ] && [ -f "$transcript" ]; then
+  turn_ms=$(tail -n 1500 "$transcript" | jq -rs '
+    def ms: (.[0:19] + "Z" | fromdateiso8601) * 1000 + ((.[20:23] // "0") | tonumber);
+    ([ .[] | select(.type=="user" and (.isMeta|not) and (.timestamp != null)
+        and (.message.content | (type=="string") or (type=="array" and .[0].type != "tool_result"))) ] | last) as $u
+    | if $u == null then empty else
+        ([ .[] | select(.type=="system" and .subtype=="turn_duration" and .timestamp > $u.timestamp) ] | first) as $d
+        | if $d then $d.durationMs else (now * 1000 - ($u.timestamp | ms)) end | floor
+      end' 2>/dev/null)
+fi
+
 fmt_dur() {
   local s=$(($1 / 1000))
   if [ "$s" -ge 3600 ]; then printf '%dh%02dm' $((s / 3600)) $((s % 3600 / 60))
@@ -64,7 +78,8 @@ for seg in $SHOW; do
     model) [ -n "$model" ] && parts+=("${cyan}${model}${rst}") ;;
     tps)   [ -n "$tps" ] && parts+=("⚡ ${tps} tok/s") ;;
     cost)  [ -n "$cost" ] && parts+=("$(printf '$%.4f' "$cost")") ;;
-    dur)   [ -n "$dur_ms" ] && parts+=("⏱ $(fmt_dur "${dur_ms%.*}")") ;;
+    dur)   [ -n "$turn_ms" ] && parts+=("⏱ $(fmt_dur "$turn_ms")") ;;
+    total) [ -n "$dur_ms" ] && parts+=("Σ $(fmt_dur "${dur_ms%.*}")") ;;
     cache) [ -n "$cache" ] && parts+=("cache ${cache}") ;;
     ctx)   [ -n "$ctx" ] && parts+=("ctx ${ctx}") ;;
   esac
