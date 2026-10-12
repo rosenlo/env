@@ -1,14 +1,17 @@
 #!/bin/bash
 # Claude Code status line, modelled on rosenlo/opencode-status-bar.
-# Segments (edit SHOW to reorder/remove): model tps cost dur total cache ctx 5h 7d
+# Segments (edit SHOW to reorder/remove): dir model tps cost dur total cache ctx 5h 7d
 # 5h / 7d = subscription rate-limit usage and time until reset.
 # dur = current/last turn time, total = whole session wall time.
-SHOW="model tps cost dur total cache ctx 5h 7d"
+SHOW="dir model tps dur total cache ctx 5h 7d"
 
 input=$(cat)
 j() { printf '%s' "$input" | jq -r "$1 // empty" 2>/dev/null; }
 
 model=$(j '.model.display_name')
+# dir: project root name only.
+proj=$(j '.workspace.project_dir'); cwd=$(j '.workspace.current_dir // .cwd')
+dir=${proj:-$cwd}; dir=${dir##*/}
 cost=$(j '.cost.total_cost_usd')
 dur_ms=$(j '.cost.total_duration_ms')
 transcript=$(j '.transcript_path')
@@ -90,10 +93,11 @@ rate_seg() { # $1=label $2=jq key
 rl5=$(rate_seg 5h five_hour)
 rl7=$(rate_seg 7d seven_day)
 
-dim=$'\033[2m'; rst=$'\033[0m'; cyan=$'\033[36m'
+dim=$'\033[2m'; rst=$'\033[0m'; cyan=$'\033[36m'; bright=$'\033[1;92m'
 parts=()
 for seg in $SHOW; do
   case $seg in
+    dir)   [ -n "$dir" ] && parts+=("${bright}${dir}${rst}") ;;
     model) [ -n "$model" ] && parts+=("${cyan}${model}${rst}") ;;
     tps)   [ -n "$tps" ] && parts+=("⚡ ${tps} tok/s") ;;
     cost)  [ -n "$cost" ] && parts+=("$(printf '$%.4f' "$cost")") ;;
